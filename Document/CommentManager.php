@@ -70,8 +70,9 @@ class CommentManager extends BaseCommentManager
     {
         $qb = $this->repository
             ->createQueryBuilder()
-            ->field('thread.$id')->equals($thread->getId())
-            ->sort('ancestors', 'ASC');
+            ->field('thread.$id')->equals(new \MongoId($thread->getId()))
+            ->sort('ancestors', 'ASC')
+        ;
 
         if ($depth > 0) {
             // Queries for an additional level so templates can determine
