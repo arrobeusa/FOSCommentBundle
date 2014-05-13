@@ -140,6 +140,18 @@ abstract class Thread implements ThreadInterface
     }
 
     /**
+     * Decrements the number of comments by the supplied
+     * value.
+     *
+     * @param  integer $by Value to increment comments by
+     * @return integer The new comment total
+     */
+    public function decrementNumComments($by = 1)
+    {
+        return $this->numComments -= intval($by);
+    }
+
+    /**
      * @return DateTime
      */
     public function getLastCommentAt()
