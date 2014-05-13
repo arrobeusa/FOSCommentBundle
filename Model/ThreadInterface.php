@@ -79,6 +79,15 @@ interface ThreadInterface
     public function incrementNumComments($by);
 
     /**
+     * Decrements the number of comments by the supplied
+     * value.
+     *
+     * @param  integer $by The number of comments to increment by
+     * @return integer The new comment total
+     */
+    public function decrementNumComments($by);
+
+    /**
      * Denormalized date of the last comment
      * @return DateTime
      */

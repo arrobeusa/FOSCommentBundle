@@ -47,12 +47,28 @@ class ThreadCountersListener implements EventSubscriberInterface
     {
         $comment = $event->getComment();
 
-        if (!$this->commentManager->isNewComment($comment)) {
-            return;
-        }
+//        if (!$this->commentManager->isNewComment($comment)) {
+//            return;
+//        }
 
         $thread = $comment->getThread();
-        $thread->incrementNumComments(1);
+
+        $previous_state = $comment->getPreviousState();
+        $new_state      = $comment->getState();
+
+
+        if ($new_state == $previous_state) {
+            // no change in state, do nothing
+        }
+        elseif ($new_state > $previous_state) {
+            // comment is being deleted, flagged as spam or moved to pending
+            $thread->decrementNumComments(1);
+        }
+        elseif ($new_state < $previous_state) {
+            // comment is being made visible
+            $thread->incrementNumComments(1);
+        }
+
         $thread->setLastCommentAt($comment->getCreatedAt());
     }
 
