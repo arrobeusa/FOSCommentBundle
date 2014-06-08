@@ -46,19 +46,16 @@ class ThreadCountersListener implements EventSubscriberInterface
     public function onCommentPersist(CommentEvent $event)
     {
         $comment = $event->getComment();
-
-//        if (!$this->commentManager->isNewComment($comment)) {
-//            return;
-//        }
-
-        $thread = $comment->getThread();
+        $thread  = $comment->getThread();
 
         $previous_state = $comment->getPreviousState();
         $new_state      = $comment->getState();
 
-
         if ($new_state == $previous_state) {
-            // no change in state, do nothing
+            // no change in state means this is probably a new comment
+            if ($this->commentManager->isNewComment($comment)) {
+                $thread->incrementNumComments(1);
+            }
         }
         elseif ($new_state > $previous_state) {
             // comment is being deleted, flagged as spam or moved to pending
